@@ -1,6 +1,6 @@
 # Overview
 
-This plugin enables turning your Kong API Gateway into an event source. It can be configured to take API logs and relay them to configurable Kafka topics, supporting the CloudEvents format.
+This plugin enables turning your Kong API Gateway into an event source. It can be configured to take API logs and relay them to configurable Kafka topics, supporting the CloudEvents format. It also supports authentication to Kafka using SASL/PLAIN (and therefore supports confluent cloud)
 
 # Installation
 

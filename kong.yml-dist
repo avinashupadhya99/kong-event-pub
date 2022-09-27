@@ -1,0 +1,41 @@
+_format_version: "2.1"
+services:
+- name: "hypothetical-order-service"
+  url: http://httpbin.org/anything
+  routes:
+  - name: order
+    paths:
+    - /order
+plugins:
+- name: kong-event-pub
+  config:
+    bootstrap_servers: "YOUR_BOOTSTRAP_SERVERS"
+    port: 9092
+    ssl: true
+    sasl_mechanism: "PLAIN"
+    sasl_user: "INSERT_YOUR_SASL_USERNAME"
+    sasl_password: "INSERT_YOUR_SASL_PASSWORD"
+    encoding: "application/json"
+    format: "CloudEventsKafkaProtocolBinding"
+    eventmaps: 
+      -
+        request_path_match: "/order"
+        position: 0
+        http_method: "POST"
+        response_codes:
+          - 200
+          - 201
+        destination_topic: "OrderCreated"
+        key: "kong.request.route"
+        data: "kong.response.body"
+      -
+        request_path_match: "/order"
+        position: 0
+        http_method: "PUT"
+        response_codes:
+          - 200
+          - 201
+        destination_topic: "OrderUpdated"
+        key: "kong.request.route"
+        data: "kong.response.body"
+    dead_letter_channel: "dlc"       
