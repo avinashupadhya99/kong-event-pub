@@ -20,8 +20,10 @@ services:
       KONG_DATABASE: 'off'
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
-      KONG_PLUGINS: kong-event-pub, key-auth
+      KONG_PLUGINS: kong-event-pub
       KONG_LOG_LEVEL: 'debug'
+      SASL_USER: "${SASL_USER}"
+      SASL_PASSWORD: "$SASL_PASSWORD}"
     networks:
       - kong-net
     ports:
@@ -32,3 +34,20 @@ services:
     volumes:
       - .:/opt/conf/
     command: sh /opt/conf/build.sh
+
+  python-test:
+    image: python:3.8
+    depends_on:
+      - kong
+    environment:
+      SASL_USER: "${SASL_USER}"
+      SASL_PASSWORD: "${SASL_PASSWORD}"
+      BOOTSTRAP_SERVERS: "${BOOTSTRAP_SERVERS}"
+      TOPIC: "${TOPIC}"
+    networks:
+      - kong-net
+    volumes:
+      - ./test.py:/app/test.py
+      - ./requirements.txt:/app/requirements.txt
+      - ./run-pytest.sh:/app/run-pytest.sh
+    command: bash -c "./app/run-pytest.sh"

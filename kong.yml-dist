@@ -1,4 +1,4 @@
-_format_version: "2.1"
+_format_version: "2.8"
 services:
 - name: "hypothetical-order-service"
   url: http://httpbin.org/anything
@@ -9,33 +9,12 @@ services:
 plugins:
 - name: kong-event-pub
   config:
-    bootstrap_servers: "YOUR_BOOTSTRAP_SERVERS"
+    bootstrap_servers: "{{bootstrap_servers}}"
     port: 9092
     ssl: true
     sasl_mechanism: "PLAIN"
-    sasl_user: "INSERT_YOUR_SASL_USERNAME"
-    sasl_password: "INSERT_YOUR_SASL_PASSWORD"
+    sasl_user: '{{sasl_user}}'
+    sasl_password: '{{sasl_password}}'
     encoding: "application/json"
-    format: "CloudEventsKafkaProtocolBinding"
-    eventmaps: 
-      -
-        request_path_match: "/order"
-        position: 0
-        http_method: "POST"
-        response_codes:
-          - 200
-          - 201
-        destination_topic: "OrderCreated"
-        key: "kong.request.route"
-        data: "kong.response.body"
-      -
-        request_path_match: "/order"
-        position: 0
-        http_method: "PUT"
-        response_codes:
-          - 200
-          - 201
-        destination_topic: "OrderUpdated"
-        key: "kong.request.route"
-        data: "kong.response.body"
-    dead_letter_channel: "dlc"       
+    eventval: '{"specversion": "1.0", "id": "{{ request.correlation_id }}", "source": "{{ client.ip }}", "request": "{{ request }}", "response": "{{ response }}", "consumer": "{{ consumer }}", "route": "{{ route }}", "service": "{{ service }}"}'
+    topic: '{{request.path}}' 

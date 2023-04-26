@@ -5,3 +5,5 @@ servroot
 *.rock
 # exclude Pongo shell history
 .pongo/.ash_history
+.env
+kong.yml

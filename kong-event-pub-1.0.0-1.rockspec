@@ -16,7 +16,9 @@ description = {
 }
 
 dependencies = {
-  "lua-resty-kafka >= 0.20-0",
+  "lua-resty-kafka = 0.22-0",
+  "lua-resty-jit-uuid = 0.0.7-2",
+  "lua-resty-openssl = 0.8.21-1",
   "uuid >= 0.3-1",
 }
 
