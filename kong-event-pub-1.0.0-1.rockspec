@@ -5,8 +5,8 @@ version = "1.0.0-1"
 supported_platforms = {"linux"}
 
 source = {
-  url = "git@github.com:Platformatory/kong-event-pub.git",
-  tag = "1.0.0"
+  url = "git+https://github.com/Platformatory/kong-event-pub",
+  tag = "main"
 }
 
 description = {
