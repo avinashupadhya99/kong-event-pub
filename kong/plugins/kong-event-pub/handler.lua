@@ -70,6 +70,15 @@ local function template_compile(str, data)
   end))
 end
 
+function resolve_uri_path_parts(uri_path)
+  local fragments = {}
+  for fragment in uri_path:gmatch('[^/]+') do
+    table.insert(fragments, fragment)
+  end
+  return fragments
+end
+
+
 local function kong_get_current_context(context)
   local context = context or {}
   context['request'] = {}
@@ -80,6 +89,7 @@ local function kong_get_current_context(context)
     context['request']['query'][k] = v
   end
   context['request']['path'] = kong.request.get_path()
+  context['request']['path_parts'] = resolve_uri_path_parts(kong.request.get_path())
   context['request']['method'] = kong.request.get_method()
   context['request']['body'] = kong.ctx.plugin.request_body
   context['request']['time'] = kong.ctx.plugin.request_access_time
