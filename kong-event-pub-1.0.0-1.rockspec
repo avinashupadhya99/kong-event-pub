@@ -10,7 +10,7 @@ source = {
 }
 
 description = {
-  summary = "Turn Kong API logs into an event solurce",
+  summary = "Turn Kong API logs into an event source",
   license = "MIT",
   maintainer = "Pavan Keshavamurthy <pavan@platformatory.com>"
 }
